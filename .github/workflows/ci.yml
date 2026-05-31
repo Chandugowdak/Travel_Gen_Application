@@ -1,0 +1,56 @@
+name: Full Stack CI/CD Pipeline
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+
+  # =========================
+  # FRONTEND JOB
+  # =========================
+  frontend:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Get Code
+        uses: actions/checkout@v3
+
+      - name: ⚙️ Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: 📦 Install Dependencies
+        working-directory: ./FrontEnd
+        run: npm ci
+
+      - name: 🏗️ Build Frontend
+        working-directory: ./FrontEnd
+        run: npm run start
+
+
+  # =========================
+  # BACKEND JOB
+  # =========================
+  backend:
+    name: Backend Run
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Get Code
+        uses: actions/checkout@v3
+
+      - name: ⚙️ Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: 📦 Install Dependencies
+        working-directory: ./BackEnd
+        run: npm ci
+
+      - name: ✅ Verify Backend Code
+        working-directory: ./BackEnd
+        run: node -c Main.js
