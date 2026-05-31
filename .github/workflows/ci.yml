@@ -28,7 +28,7 @@ jobs:
 
       - name: 🏗️ Build frontend
         working-directory: ./frontend
-        run: npm run start
+        run: npm run build
 
 
   # =========================
