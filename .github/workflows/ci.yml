@@ -7,10 +7,10 @@ on:
 jobs:
 
   # =========================
-  # FRONTEND JOB
+  # frontend JOB
   # =========================
   frontend:
-    name: Frontend Build
+    name: frontend Build
     runs-on: ubuntu-latest
 
     steps:
@@ -23,19 +23,19 @@ jobs:
           node-version: '22'
 
       - name: 📦 Install Dependencies
-        working-directory: ./FrontEnd
+        working-directory: ./frontend
         run: npm ci
 
-      - name: 🏗️ Build Frontend
-        working-directory: ./FrontEnd
+      - name: 🏗️ Build frontend
+        working-directory: ./frontend
         run: npm run start
 
 
   # =========================
-  # BACKEND JOB
+  # backend JOB
   # =========================
   backend:
-    name: Backend Run
+    name: backend Run
     runs-on: ubuntu-latest
 
     steps:
@@ -48,9 +48,9 @@ jobs:
           node-version: '22'
 
       - name: 📦 Install Dependencies
-        working-directory: ./BackEnd
+        working-directory: ./backend
         run: npm ci
 
-      - name: ✅ Verify Backend Code
-        working-directory: ./BackEnd
+      - name: ✅ Verify backend Code
+        working-directory: ./backend
         run: node -c Main.js
