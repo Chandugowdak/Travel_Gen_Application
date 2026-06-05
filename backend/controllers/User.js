@@ -34,23 +34,52 @@ const registeruser = async (req, res) => {
 const Userlogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    if(!email || !password){
-        return res.status(400).json({message:"Please Fill All The Details"})
+
+    if (!email || !password) {
+      return res.status(400).json({
+        message: "Please Fill All The Details",
+      });
     }
+
     const VerifyUser = await User.findOne({ email });
+
     if (!VerifyUser) {
-      return res.status(400).json({ message: "Invalid Credentials" });
+      return res.status(400).json({
+        message: "Invalid Credentials",
+      });
     }
-    const isPasswordMatch = await bcrypt.compare(password, VerifyUser.password);
+
+    const isPasswordMatch = await bcrypt.compare(
+      password,
+      VerifyUser.password
+    );
+
     if (!isPasswordMatch) {
-      return res.status(400).json({ message: "Invalid Credentials" });
-    } 
-    const token = JWT.sign({userID:VerifyUser._id}, JWT_CODE,{expiresIn:"1d"});
-    return res.status(201).json({ message: "User Login Successfully", VerifyUser, token });
+      return res.status(400).json({
+        message: "Invalid Credentials",
+      });
+    }
+
+    const token = JWT.sign(
+      { userID: VerifyUser._id },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: "1d" }
+    );
+
+    return res.status(200).json({
+      message: "User Login Successfully",
+      user: {
+        _id: VerifyUser._id,
+        name: VerifyUser.name,
+        email: VerifyUser.email,
+      },
+      token,
+    });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Server Side Error While Login ", error: err.message });
+    return res.status(500).json({
+      message: "Server Side Error While Login",
+      error: err.message,
+    });
   }
 };
 
