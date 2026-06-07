@@ -1,4 +1,4 @@
-const UserrequestModel = require("../model/UserRequest");
+const UserRequestModel = require("../model/UserRequest");
 
 const createUserRequest = async (req, res) => {
     try{
@@ -6,7 +6,7 @@ const createUserRequest = async (req, res) => {
         if(!userID || !UserStartPlace || !UserDestination || !UserData || !NuberOfDays || !UserBudget || !UserTravelBy || !TotelNumberofPeoples){
             return res.status(400).json({ message: "All fields are required" });
         }
-        const newSentRequest = new UserrequestModel({
+        const newSentRequest = new UserRequestModel({
             userID,
             UserStartPlace,
             UserDestination,
@@ -68,4 +68,17 @@ const DeleteUserRequest = async (req,res)=>{
 }
 
 
-module.exports = { createUserRequest, EditUserRequst, DeleteUserRequest };
+const getUserRequests = async (req, res) => {
+    try {
+        const { userID } = req.params;
+        if (!userID) {
+            return res.status(400).json({ message: 'User ID is required' });
+        }
+        const requests = await UserRequestModel.find({ userID }).sort({ createdAt: -1 });
+        return res.status(200).json({ data: requests });
+    } catch (err) {
+        return res.status(500).json({ message: 'Error fetching user requests', error: err.message });
+    }
+};
+
+module.exports = { createUserRequest, EditUserRequst, DeleteUserRequest, getUserRequests };

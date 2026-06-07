@@ -1,0 +1,30 @@
+.home-shell{
+  padding:24px;
+  color:var(--text-primary,#eef2ff);
+}
+.home-hero{
+  background: linear-gradient(90deg, rgba(99,102,241,0.12), rgba(14,165,233,0.06));
+  padding:18px;
+  border-radius:12px;
+  margin-bottom:18px;
+}
+.home-content{
+  display:flex;
+  gap:18px;
+}
+.side-panel{
+  width:320px;
+  background: rgba(15,23,42,0.6);
+  padding:16px;
+  border-radius:10px;
+}
+.request-form label{display:block;margin-bottom:8px}
+.request-form input{width:100%;padding:8px;border-radius:6px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:var(--text-primary)}
+.primary{background:var(--primary,#6366f1);color:white;border:none;padding:10px 14px;border-radius:8px;margin-top:8px}
+.requests-panel{flex:1}
+.requests-list{display:flex;flex-direction:column;gap:12px}
+.request-card{background:rgba(2,6,23,0.6);padding:12px;border-radius:10px}
+.request-card .route{font-weight:600}
+.request-card .meta{color:var(--text-secondary,#cbd5e1);font-size:13px}
+.actions{margin-top:8px}
+.danger{background:#ef4444;color:white;border:none;padding:6px 8px;border-radius:6px}
