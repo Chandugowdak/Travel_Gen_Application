@@ -7,7 +7,7 @@ import BookingsPage from './components/Bookings/BookingsPage';
 import SettingsPage from './components/Settings/SettingsPage';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import Navbar from './components/Nav/Navbar';
-import './App.css';
+
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useContext(AuthContext);

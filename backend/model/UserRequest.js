@@ -33,6 +33,10 @@ const userRequestSchema = new mongoose.Schema({
   TotelNumberofPeoples:{
     type:Number,
     required:true
+  },
+  generatedPlan:{
+    type:String,
+    default:""
   }
 });
 

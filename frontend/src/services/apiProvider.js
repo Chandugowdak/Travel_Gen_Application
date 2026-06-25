@@ -118,6 +118,16 @@ export const apiProvider = {
     if (!response.ok) throw new Error(data.message || 'Failed to delete request');
     return data;
   },
+
+  regenerateRequest: async (id) => {
+    const response = await fetch(`${API_BASE}/regenerate/request/${id}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || 'Failed to regenerate request');
+    return data;
+  },
 };
 
 export default apiProvider;

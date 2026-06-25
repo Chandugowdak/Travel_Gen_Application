@@ -1,4 +1,5 @@
 const UserRequestModel = require("../model/UserRequest");
+const aiService = require("../services/aiService");
 
 const createUserRequest = async (req, res) => {
     try{
@@ -6,6 +7,23 @@ const createUserRequest = async (req, res) => {
         if(!userID || !UserStartPlace || !UserDestination || !UserData || !NuberOfDays || !UserBudget || !UserTravelBy || !TotelNumberofPeoples){
             return res.status(400).json({ message: "All fields are required" });
         }
+        
+        // Generate detailed trip plan using AI service
+        let generatedPlan = "";
+        try {
+            generatedPlan = await aiService.generatePlan({
+                UserStartPlace,
+                UserDestination,
+                UserData,
+                NuberOfDays,
+                UserBudget,
+                UserTravelBy,
+                TotelNumberofPeoples
+            });
+        } catch (aiErr) {
+            console.error("AI Generation failed, creating request without it:", aiErr.message);
+        }
+
         const newSentRequest = new UserRequestModel({
             userID,
             UserStartPlace,
@@ -14,7 +32,8 @@ const createUserRequest = async (req, res) => {
             NuberOfDays,
             UserBudget,
             UserTravelBy,
-            TotelNumberofPeoples
+            TotelNumberofPeoples,
+            generatedPlan
         });
        const VerifySave =  await newSentRequest.save();
        if(!VerifySave){
@@ -81,4 +100,34 @@ const getUserRequests = async (req, res) => {
     }
 };
 
-module.exports = { createUserRequest, EditUserRequst, DeleteUserRequest, getUserRequests };
+const regenerateUserRequest = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!id) {
+            return res.status(400).json({ message: "User request ID is required" });
+        }
+        const trip = await UserRequestModel.findById(id);
+        if (!trip) {
+            return res.status(404).json({ message: "User request not found" });
+        }
+
+        const newPlan = await aiService.generatePlan({
+            UserStartPlace: trip.UserStartPlace,
+            UserDestination: trip.UserDestination,
+            UserData: trip.UserData,
+            NuberOfDays: trip.NuberOfDays,
+            UserBudget: trip.UserBudget,
+            UserTravelBy: trip.UserTravelBy,
+            TotelNumberofPeoples: trip.TotelNumberofPeoples
+        });
+
+        trip.generatedPlan = newPlan;
+        await trip.save();
+
+        return res.status(200).json({ message: "User request plan regenerated successfully", data: trip });
+    } catch (err) {
+        return res.status(500).json({ message: "Error regenerating plan", error: err.message });
+    }
+};
+
+module.exports = { createUserRequest, EditUserRequst, DeleteUserRequest, getUserRequests, regenerateUserRequest };
